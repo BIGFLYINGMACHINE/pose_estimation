@@ -1,8 +1,10 @@
 import cv2
+import math
 import numpy as np
-import OpenPoseImage as opi 
-# Read Image
-im = cv2.imread("2_4meters.jpg")
+import OpenPoseImage as opi
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, Circle
+im = cv2.imread("mask.jpg")
 size = im.shape
 
 # 2D image points. If you change the image, you need to change vector
@@ -51,8 +53,36 @@ for p in image_points:
 p1 = (int(image_points[0][0]), int(image_points[0][1]))
 p2 = (int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
 
-cv2.line(im, p1, p2, (255, 0, 0), 2)
+# cv2.line(im, p1, p2, (255, 0, 0), 2)
 
 # Display image
+cv2.namedWindow("Output", cv2.WINDOW_NORMAL)
 cv2.imshow("Output", im)
 cv2.waitKey(0)
+
+scale_factor = 1
+fig = plt.figure()
+ax = fig.add_subplot(111)
+plt.title("Classroom")
+plt.xlim([-3600*scale_factor, 3600*scale_factor])
+plt.ylim([0, 9000*scale_factor])
+width = 500
+height = 1000
+human_x = int(translation_vector[0][0])
+human_y = int(abs(translation_vector[2][0]))
+print(human_x, human_y)
+plt.plot([0, 0], [0, 9000], color='blue')
+plt.plot([-3600, 3600], [3000, 3000], color='blue')
+plt.plot([-3600, 3600], [6000, 6000], color='blue')
+for x in [-1800, 1800]:
+    for y in [1500, 4500, 7500]:
+        x_lf = x - width/2
+        y_lf = y - height/2
+        if math.sqrt(math.pow(human_x-x_lf, 2) + math.pow(human_y-y_lf,2))< 2350:
+            rect = Rectangle((x_lf, y_lf), width, height, color='yellow')
+        else:
+            rect = Rectangle((x_lf, y_lf), width, height, color='black')
+        ax.add_patch(rect)
+rect = Circle((human_x, human_y), 50, color = 'red')
+ax.add_patch(rect)
+plt.show()

@@ -76,12 +76,12 @@ def get_location(frame):
             cv2.circle(frame, points[partA], 8, (0, 0, 255), thickness=-1, lineType=cv2.FILLED)
 
 
-    cv2.imshow('Output-Keypoints', frameCopy)
-    cv2.imshow('Output-Skeleton', frame)
+    # cv2.imshow('Output-Keypoints', frameCopy)
+    # cv2.imshow('Output-Skeleton', frame)
 
 
-    cv2.imwrite('Output-Keypoints.jpg', frameCopy)
-    cv2.imwrite('Output-Skeleton.jpg', frame)
+    # cv2.imwrite('Output-Keypoints.jpg', frameCopy)
+    # cv2.imwrite('Output-Skeleton.jpg', frame)
 
     print("Total time taken : {:.3f}".format(time.time() - t))
     return image_points
